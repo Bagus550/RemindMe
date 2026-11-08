@@ -1,0 +1,98 @@
+# ==============================================================================
+#                      DOKUMENTASI KONFIGURASI REMINDME
+# ==============================================================================
+# Plugin ini digunakan untuk mengirimkan pesan otomatis (broadcast) berdasarkan
+# kelompok dunia (world groups) dan kriteria minimal pemain online di world tersebut.
+#
+# Mendukung format Kyori Adventure MiniMessage untuk teks dan efek warna:
+# - Warna dasar: <red>, <green>, <yellow>, <blue>, <aqua>, <white>, <gray>
+# - Gradien warna: <gradient:#ff5555:#55ffff>Teks Gradien</gradient>
+# - Format teks: <bold>, <italic>, <underlined>, <strikethrough>
+# - Event Tombol/Hover:
+#   * Hover: <hover:show_text:'<green>Teks Hover</green>'>Arahkan kursor</hover>
+#   * Klik Link: <click:open_url:'https://example.com'>[KLIK DISINI]</click>
+#   * Klik Command: <click:run_command:'/menu'>[BUKA MENU]</click>
+# ==============================================================================
+
+# Pengaturan Global Plugin
+settings:
+  # Prefix/awalan yang akan selalu muncul di depan pesan broadcast (jika dipanggil di kode)
+  prefix: "<bold><gradient:#ff7e5f:#feb47b>[RemindMe]</gradient></bold> "
+
+# ------------------------------------------------------------------------------
+# DAFTAR GRUP BROADCAST (Bisa ditambah grup baru sesuai kebutuhan)
+# ------------------------------------------------------------------------------
+broadcasts:
+
+  # ============================================================================
+  # 1. GRUP LOBBY / HUB
+  # Pesan otomatis yang khusus ditampilkan untuk pemain di area Lobby/Hub.
+  # ============================================================================
+  lobby-group:
+    # Setel ke 'true' untuk mengaktifkan grup ini, 'false' untuk menonaktifkan
+    enabled: true
+
+    # Jeda waktu perulangan pengiriman pesan (dalam satuan DETIK)
+    # 120 detik = 2 menit
+    interval-seconds: 120
+
+    # Syarat minimal jumlah pemain yang sedang online DI WORLD TARGET agar pesan terkirim
+    min-players: 1
+
+    # Pengurutan pengiriman pesan:
+    # false = Pesan dikirim berurutan dari atas ke bawah (rotasi)
+    # true  = Pesan dikirim secara acak
+    random: false
+
+    # Tipe tampilan pesan di layar pemain. Opsi yang tersedia:
+    # - "CHAT"      : Obrolan biasa di chat box
+    # - "ACTIONBAR" : Teks melayang kecil di atas hotbar item
+    # - "TITLE"     : Teks besar di tengah layar pemain
+    display-type: "CHAT"
+
+    # Sound effect/efek suara yang diputar ke pemain saat pesan muncul.
+    # Kosongkan ("") jika tidak ingin memakai suara.
+    # Daftar ID sound Minecraft: https://minecraft.wiki/w/Sounds.json
+    sound: "block.note_block.chime"
+
+    # Daftar nama world yang ditargetkan untuk menerima pesan grup ini
+    target-worlds:
+      - "lobby"
+      - "hub"
+
+    # Daftar teks pesan yang akan diputar/dikirimkan
+    messages:
+      - "<yellow>Selamat datang di server!</yellow>"
+      - "<gray>Gunakan <green>/menu</green> untuk memilih mode permainan.</gray>"
+      - "<aqua>Jangan lupa gabung Discord kami di <click:open_url:'https://discord.gg/example'><underline>discord.gg/example</underline></click>!</aqua>"
+
+  # ============================================================================
+  # 2. GRUP VANILLA / SURVIVAL
+  # Pesan otomatis khusus untuk pemain yang berada di dunia permainan Vanilla/Survival.
+  # ============================================================================
+  vanilla-group:
+    enabled: true
+
+    # 300 detik = 5 menit
+    interval-seconds: 300
+
+    # Pesan hanya terkirim jika ada minimal 3 pemain online di world vanilla ini
+    min-players: 3
+
+    random: false
+
+    # Ditampilkan melayang di atas hotbar
+    display-type: "ACTIONBAR"
+
+    sound: "entity.experience_orb.pickup"
+
+    # Meliputi overworld, nether, dan end
+    target-worlds:
+      - "world"
+      - "world_nether"
+      - "world_the_end"
+
+    messages:
+      - "<green>Tips Vanilla:</green> <white>Jangan lupa gunakan klaim area agar bangunanmu aman dari griefing!</white>"
+      - "<aqua>Ingat untuk istirahat sejenak dan minum air putih!</aqua>"
+      - "<yellow>Ketik <gold>/vote</gold> untuk mendukung server dan mendapatkan hadiah harian!</yellow>"

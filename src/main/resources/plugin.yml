@@ -1,0 +1,17 @@
+name: RemindMe
+version: ${version}
+main: id.bagus.remindMe.RemindMe
+api-version: '26.2'
+author: BagusDev
+description: Plugin pesan otomatis berbasis world group dan min-players check.
+
+commands:
+  remindme:
+    description: Perintah utama plugin RemindMe
+    permission: remindme.use
+    usage: /remindme [reload]
+
+permissions:
+  remindme.admin:
+    description: Izin untuk memuat ulang plugin
+    default: op
