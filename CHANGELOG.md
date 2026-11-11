@@ -6,6 +6,22 @@ Format berpatokan pada [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ---
 
+## [1.0.1] - 2026-11-11
+
+### 🐛 Fixed (Perbaikan Bug)
+- **Sound tidak berbunyi:** ID sound sebelumnya diubah titik menjadi underscore (`block_note_block_chime`) sehingga tidak dikenali. Sekarang ID dipakai apa adanya (`block.note_block.chime`).
+- **Permission `remindme.use`** kini dideklarasikan di `plugin.yml` dengan default `true`, sehingga pemain biasa bisa memakai `/remindme` sesuai dokumentasi.
+- **Validasi `interval-seconds`:** nilai kurang dari 1 otomatis dinaikkan ke 1 detik dan dicatat sebagai peringatan di console.
+
+### ✨ Changed (Perubahan)
+- Versi di `/remindme` kini diambil otomatis dari metadata plugin (tidak lagi hardcode).
+- Tambah tab-complete untuk `/remindme reload` (hanya untuk yang punya `remindme.admin`).
+- Peringatan di console jika `target-worlds` kosong dan format ID sound tidak valid.
+- README disesuaikan: Paper 26.2, Java 25, tidak mendukung Spigot murni.
+- Rapikan `gradle.properties` (hapus `group`/`version` ganda).
+
+---
+
 ## [1.0.0] - 2026-11-08
 
 ### 🚀 Added (Fitur Baru)

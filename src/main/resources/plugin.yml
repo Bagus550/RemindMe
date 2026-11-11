@@ -12,6 +12,9 @@ commands:
     usage: /remindme [reload]
 
 permissions:
+  remindme.use:
+    description: Izin untuk melihat info plugin
+    default: true
   remindme.admin:
     description: Izin untuk memuat ulang plugin
     default: op

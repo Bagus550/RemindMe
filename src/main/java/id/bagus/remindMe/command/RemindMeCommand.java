@@ -5,9 +5,12 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.jetbrains.annotations.NotNull;
 
-public class RemindMeCommand implements CommandExecutor {
+import java.util.List;
+
+public class RemindMeCommand implements CommandExecutor, TabCompleter {
     private final RemindMe plugin;
     private final MiniMessage miniMessage = MiniMessage.miniMessage();
 
@@ -28,8 +31,19 @@ public class RemindMeCommand implements CommandExecutor {
             return true;
         }
 
-        sender.sendMessage(miniMessage.deserialize("<gradient:#ff7e5f:#feb47b><bold>RemindMe</bold></gradient> <gray>v1.0.0 oleh Bagus</gray>"));
+        String version = plugin.getPluginMeta().getVersion();
+        sender.sendMessage(miniMessage.deserialize("<gradient:#ff7e5f:#feb47b><bold>RemindMe</bold></gradient> <gray>v" + version + " oleh Bagus</gray>"));
         sender.sendMessage(miniMessage.deserialize("<gray>Gunakan <green>/remindme reload</green> untuk memuat ulang konfigurasi.</gray>"));
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        if (args.length == 1 && sender.hasPermission("remindme.admin")) {
+            return List.of("reload").stream()
+                    .filter(s -> s.startsWith(args[0].toLowerCase()))
+                    .toList();
+        }
+        return List.of();
     }
 }

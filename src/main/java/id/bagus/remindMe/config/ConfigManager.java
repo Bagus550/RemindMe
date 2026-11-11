@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigManager {
+    private static final int MIN_INTERVAL_SECONDS = 1;
+
     private final RemindMe plugin;
     private String prefix;
     private final List<BroadcastGroup> broadcastGroups = new ArrayList<>();
@@ -36,6 +38,18 @@ public class ConfigManager {
             String sound = plugin.getConfig().getString(path + ".sound", "");
             List<String> targetWorlds = plugin.getConfig().getStringList(path + ".target-worlds");
             List<String> messages = plugin.getConfig().getStringList(path + ".messages");
+
+            // Validasi interval: nilai 0 atau negatif bisa membuat scheduler error / spam chat
+            if (interval < MIN_INTERVAL_SECONDS) {
+                plugin.getLogger().warning("Grup '" + key + "': interval-seconds (" + interval
+                        + ") tidak valid, dipakai nilai minimal " + MIN_INTERVAL_SECONDS + " detik.");
+                interval = MIN_INTERVAL_SECONDS;
+            }
+
+            // Peringatan jika tidak ada world target (grup tidak akan mengirim ke siapa pun)
+            if (enabled && targetWorlds.isEmpty()) {
+                plugin.getLogger().warning("Grup '" + key + "': target-worlds kosong, pesan tidak akan terkirim ke siapa pun.");
+            }
 
             broadcastGroups.add(new BroadcastGroup(key, enabled, interval, minPlayers, random, displayType, sound, targetWorlds, messages));
         }

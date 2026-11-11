@@ -2,12 +2,13 @@ package id.bagus.remindMe.task;
 
 import id.bagus.remindMe.RemindMe;
 import id.bagus.remindMe.model.BroadcastGroup;
+import net.kyori.adventure.key.InvalidKeyException;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 
 import java.time.Duration;
@@ -20,11 +21,30 @@ public class AnnouncementTask implements Runnable {
     private final BroadcastGroup group;
     private final MiniMessage miniMessage = MiniMessage.miniMessage();
     private final Random random = new Random();
+    private final Sound soundEffect;
     private int messageIndex = 0;
 
     public AnnouncementTask(RemindMe plugin, BroadcastGroup group) {
         this.plugin = plugin;
         this.group = group;
+        this.soundEffect = buildSound();
+    }
+
+    /**
+     * Membuat objek Sound sekali saja saat task dibuat.
+     * ID sound dipakai apa adanya (titik tetap titik), contoh: block.note_block.chime
+     */
+    private Sound buildSound() {
+        String raw = group.getSound();
+        if (raw == null || raw.isBlank()) return null;
+
+        try {
+            return Sound.sound(Key.key(raw.trim().toLowerCase()), Sound.Source.PLAYER, 1.0f, 1.0f);
+        } catch (InvalidKeyException e) {
+            plugin.getLogger().warning("Grup '" + group.getId() + "': format ID sound tidak valid -> '"
+                    + raw + "'. Suara dinonaktifkan untuk grup ini.");
+            return null;
+        }
     }
 
     @Override
@@ -70,16 +90,8 @@ public class AnnouncementTask implements Runnable {
             }
 
             // Mainkan suara notifikasi jika ada
-            if (!group.getSound().isEmpty()) {
-                try {
-                    Sound soundEffect = Sound.sound(
-                            NamespacedKey.minecraft(group.getSound().toLowerCase().replace(".", "_")),
-                            Sound.Source.PLAYER, 1.0f, 1.0f
-                    );
-                    player.playSound(soundEffect);
-                } catch (Exception ignored) {
-                    // Penanganan jika ID suara tidak valid
-                }
+            if (soundEffect != null) {
+                player.playSound(soundEffect);
             }
         }
     }
